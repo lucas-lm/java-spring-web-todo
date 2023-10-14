@@ -17,11 +17,10 @@ public class UserController {
   private IUserRepository userRepository;
 
   @PostMapping("/")
-  public ResponseEntity create(@RequestBody UserModel user) {
+  public ResponseEntity<?> create(@RequestBody UserModel user) {
     var foundUser = this.userRepository.findByUsername(user.getUsername());
 
     if (foundUser != null) {
-      System.out.println("User already exists.");
       return ResponseEntity.badRequest().body("User already exists");
     }
 
