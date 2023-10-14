@@ -3,6 +3,7 @@ package com.lucasm.taskman.task;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,13 @@ public class TaskController {
   private ITaskRepository taskRepository;
 
   @PostMapping("/")
-  public TaskModel create(@RequestBody TaskModel task, ServletRequest request) {
+  public ResponseEntity<?> create(@RequestBody TaskModel task, ServletRequest request) {
     var userId = request.getAttribute("userId");
     task.setUserId((UUID) userId);
+    if (task.getStartAt().isAfter(task.getEndAt())) {
+      return ResponseEntity.badRequest().body("Start timestamp should not be after End timestamp");
+    }
     var createdTask = this.taskRepository.save(task);
-    return createdTask;
+    return ResponseEntity.ok().body(createdTask);
   }
 }
