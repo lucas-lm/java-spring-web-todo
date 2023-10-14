@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,6 +24,9 @@ public class UserController {
       System.out.println("User already exists.");
       return ResponseEntity.badRequest().body("User already exists");
     }
+
+    var hashedPW = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
+    user.setPassword(hashedPW);
 
     var newUser = this.userRepository.save(user);
     return ResponseEntity.ok(newUser);
