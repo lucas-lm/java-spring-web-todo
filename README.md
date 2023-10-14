@@ -47,7 +47,7 @@ Tasks can be only managed by their owners.
 | userId        | UUID          | Yes       | `Foreign Key`           | Task's owner ID               | Yes             |
 | title         | String        | Yes       | `3 < length < 50`       | Task's Title                  | No              |
 | description   | String        | No        | `length < 255`          | Task's full name              | No              |
-| priority      | String        | No        | `HIGH | MEDIUM | LOW`   | Task's password               | No              |
+| priority      | String        | No        | `"HIGH", "MEDIUM", "LOW"`   | Task's password               | No              |
 | startAt       | LocalDateTime | No        | Cannot be after `endAt` | Task's start timestamp        | No              |
 | endAt         | LocalDateTime | No        |                         | Task's end timestamp          | No              |
 | createdAt     | LocalDateTime | Yes       |                         | Task's registration timestamp | Yes             |
