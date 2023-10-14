@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/tasks")
@@ -20,7 +20,7 @@ public class TaskController {
   private ITaskRepository taskRepository;
 
   @PostMapping("/")
-  public ResponseEntity<?> create(@RequestBody TaskModel task, ServletRequest request) {
+  public ResponseEntity<?> create(@RequestBody TaskModel task, HttpServletRequest request) {
     var userId = request.getAttribute("userId");
     task.setUserId((UUID) userId);
 
@@ -40,7 +40,7 @@ public class TaskController {
   }
 
   @GetMapping("/")
-  public ResponseEntity<?> list(ServletRequest request) {
+  public ResponseEntity<?> list(HttpServletRequest request) {
     var userId = request.getAttribute("userId");
     var tasks = this.taskRepository.findByUserId((UUID) userId);
     return ResponseEntity.ok().body(tasks);
