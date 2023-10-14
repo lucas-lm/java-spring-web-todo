@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +34,15 @@ public class TaskController {
     if (!isTimeOk) {
       return ResponseEntity.badRequest().body("Start timestamp should not be after End timestamp");
     }
-
+    
     var createdTask = this.taskRepository.save(task);
     return ResponseEntity.ok().body(createdTask);
+  }
+
+  @GetMapping("/")
+  public ResponseEntity<?> list(ServletRequest request) {
+    var userId = request.getAttribute("userId");
+    var tasks = this.taskRepository.findByUserId((UUID) userId);
+    return ResponseEntity.ok().body(tasks);
   }
 }
