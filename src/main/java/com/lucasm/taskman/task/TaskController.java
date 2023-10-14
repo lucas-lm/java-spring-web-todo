@@ -22,9 +22,18 @@ public class TaskController {
   public ResponseEntity<?> create(@RequestBody TaskModel task, ServletRequest request) {
     var userId = request.getAttribute("userId");
     task.setUserId((UUID) userId);
-    if (task.getStartAt().isAfter(task.getEndAt())) {
+
+    var isTimeOk = false;
+    if (task.getStartAt() == null | task.getEndAt() == null) {
+      isTimeOk = true;
+    } else {
+      isTimeOk = task.getStartAt().isBefore(task.getEndAt());
+    }
+
+    if (!isTimeOk) {
       return ResponseEntity.badRequest().body("Start timestamp should not be after End timestamp");
     }
+
     var createdTask = this.taskRepository.save(task);
     return ResponseEntity.ok().body(createdTask);
   }
